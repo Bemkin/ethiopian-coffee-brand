@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FAF7F2; /* Cream */
+  --foreground: #003548; /* Deep Navy */
 }
 
 @theme inline {
+  --color-brand-navy: #003548;
+  --color-brand-cream: #FAF7F2;
+  --font-serif: var(--font-merriweather);
+  --font-sans: var(--font-poppins);
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {

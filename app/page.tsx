@@ -1,65 +1,56 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import FrameSequencer from '@/components/FrameSequencer';
+import HorizontalSourceScroll from '@/components/HorizontalSourceScroll';
+import FlavorMatrix from '@/components/FlavorMatrix';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main ref={containerRef} className="relative w-full">
+      <FrameSequencer
+        frameCount={192}
+        baseUrl="/assets/hero-sequence/frame_"
+        extension="_delay-0.041s.jpg"
+      />
+
+      {/* The Narrative Bridge (Task 28: Refined overlap to prevent collision) */}
+      <section className="relative z-20 bg-[#FAF7F2] pt-[10vh] pb-24 md:pt-[15vh] md:pb-32 flex flex-col items-center justify-center -mt-[50vh]">
+        <div className="overflow-hidden">
+          <p className="font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-brand-navy/60 mb-6 text-center">
+            Chapter 01
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="overflow-hidden px-6">
+          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-brand-navy text-center leading-[1.1] tracking-tight">
+            From the birthplace<br />of wild Arabica.
+          </h2>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Horizontal Origin Gallery */}
+      <HorizontalSourceScroll />
+
+      {/* 3D Flavor Matrix Section */}
+      <FlavorMatrix />
+
+      {/* Footer / Contact Section */}
+      <section className="relative min-h-[50vh] flex flex-col items-center justify-center bg-brand-navy text-brand-cream px-8 py-32">
+        <div className="max-w-4xl text-center">
+          <h2 className="text-4xl md:text-6xl font-serif mb-8">From Addis to the World.</h2>
+          <p className="text-xl font-sans opacity-70 mb-12">Join our journey and discover the true essence of coffee.</p>
+          <div className="flex justify-center gap-8">
+            <a href="#" className="uppercase tracking-widest text-sm font-bold border-b border-brand-cream pb-1 hover:opacity-50 transition-opacity">Instagram</a>
+            <a href="#" className="uppercase tracking-widest text-sm font-bold border-b border-brand-cream pb-1 hover:opacity-50 transition-opacity">Wholesale</a>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
