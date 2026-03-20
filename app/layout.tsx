@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   description: "Experience the authentic taste of hand-roasted Ethiopian coffee, sourced directly from the heart of Addis Ababa.",
 };
 
+import GlobalCursor from '@/components/GlobalCursor';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,15 +31,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${merriweather.variable} ${poppins.variable} antialiased`}>
-      <body 
-        className="bg-brand-cream text-brand-navy font-sans selection:bg-brand-navy selection:text-brand-cream overflow-x-hidden"
-        suppressHydrationWarning
-      >
+      <body className="bg-[#FAF7F2] antialiased" suppressHydrationWarning>
         <SmoothScroll>
           <Navbar />
           <CheckoutDrawer />
           {children}
         </SmoothScroll>
+        <GlobalCursor />
       </body>
     </html>
   );

@@ -55,83 +55,92 @@ export default function HorizontalSourceScroll() {
 
     if (!section || !track || !bgText) return;
 
-    // Calculate how far the track needs to move (as a positive value for end trigger)
-    const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+    const mm = gsap.matchMedia();
 
-    // 1. The Main Horizontal Movement
-    const tween = gsap.to(track, {
-      x: () => -getScrollDistance(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: () => `+=${getScrollDistance()}`, // Scroll duration based on total width
-        pin: true,
-        scrub: 1, // Smooth scrub matching Lenis
-        invalidateOnRefresh: true,
-      },
+    // Desktop: Full horizontal pinning experience
+    mm.add("(min-width: 768px)", () => {
+      // Calculate how far the track needs to move (as a positive value for end trigger)
+      const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+
+      // 1. The Main Horizontal Movement
+      gsap.to(track, {
+        x: () => -getScrollDistance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${getScrollDistance()}`, // Scroll duration based on total width
+          pin: true,
+          scrub: 1, // Smooth scrub matching Lenis
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // 2. Inner Media Parallax (Task 18)
+      const videos = gsap.utils.toArray('.parallax-video');
+      gsap.to(videos, {
+        xPercent: -15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollDistance()}`,
+          scrub: true,
+        }
+      });
+
+      // 3. Giant Background Parallax (Task 18)
+      gsap.to('.giant-bg-text', {
+        x: () => -getScrollDistance() * 0.3,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollDistance()}`,
+          scrub: true,
+        }
+      });
+
+      // 4. Progress Bar Fill (Task 19)
+      gsap.to('.progress-fill', {
+        width: '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${getScrollDistance()}`,
+          scrub: true,
+        }
+      });
+
+      // 5. Ambient Light Leak Parallax (Task 21)
+      gsap.to('.ambient-glow', {
+        x: () => window.innerWidth * 0.8,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollDistance()}`,
+          scrub: true,
+        }
+      });
     });
 
-    // 2. Inner Media Parallax (Task 18)
-    // Moves the oversized videos in the opposite direction
-    const videos = gsap.utils.toArray('.parallax-video');
-    gsap.to(videos, {
-      xPercent: -15, // Pans the oversized video backwards as the card moves forwards
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: () => `+=${getScrollDistance()}`,
-        scrub: true,
-      }
-    });
-
-    // 3. Giant Background Parallax (Task 18)
-    gsap.to('.giant-bg-text', {
-      x: () => -getScrollDistance() * 0.3, // Moves at 30% the speed of the cards
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: () => `+=${getScrollDistance()}`,
-        scrub: true,
-      }
-    });
-
-    // 4. Progress Bar Fill (Task 19)
-    gsap.to('.progress-fill', {
-      width: '100%',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: () => `+=${getScrollDistance()}`,
-        scrub: true,
-      }
-    });
-
-    // 5. Ambient Light Leak Parallax (Task 21)
-    gsap.to('.ambient-glow', {
-      x: () => window.innerWidth * 0.8, // Pans the glow across the screen
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: () => `+=${getScrollDistance()}`,
-        scrub: true,
-      }
+    // Mobile: Native vertical scrolling
+    mm.add("(max-width: 767px)", () => {
+      // Disabled GSAP opacity fade to guarantee visibility.
+      // Dynamic height adjustments above this section can cause ScrollTrigger to misfire on mobile, leaving cards stranded at opacity: 0.
     });
 
     return () => {
-      tween.kill();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      mm.revert();
     };
   }, []);
 
   return (
     <section 
       ref={sectionRef} 
-      className="relative h-screen w-full overflow-hidden bg-[#FAF7F2] text-brand-navy"
+      className="drag-cursor-zone relative h-auto md:h-screen w-full overflow-hidden bg-[#FAF7F2] text-brand-navy py-20 md:py-0"
     >
       {/* 1. Cinematic Film Grain Overlay (Task 21) */}
       <div 
@@ -148,37 +157,38 @@ export default function HorizontalSourceScroll() {
       {/* Massive Parallax Background Text (Task 18) */}
       <div 
         ref={bgTextRef}
-        className="giant-bg-text absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap opacity-5 pointer-events-none z-0"
+        className="giant-bg-text fixed md:absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] md:opacity-5 pointer-events-none"
       >
-        <h2 className="font-serif text-[20vw] font-black uppercase tracking-tighter">
+        <h2 className="font-serif text-[20vw] font-black uppercase tracking-tighter whitespace-nowrap">
           ORIGIN KAFFA • ADDIS ABABA • ETHIOPIA
         </h2>
       </div>
 
-      {/* The Sliding Track */}
+      {/* The Sliding Track / Vertical Stack */}
       <div 
         ref={trackRef} 
-        className="absolute top-0 left-0 h-full flex items-center pl-[10vw] pr-[20vw] gap-[10vw] z-10"
+        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10"
       >
         {sourceCards.map((card, index) => (
           <div 
             key={card.id} 
-            className={`source-card relative w-[80vw] md:w-[52vw] h-[65vh] shrink-0 flex flex-col justify-end overflow-hidden group transition-all duration-700 ${
+            className={`source-card relative w-[100vw] md:w-[52vw] h-[60vh] md:h-[65vh] flex-shrink-0 flex flex-col justify-end overflow-hidden group transition-all duration-700 mb-8 md:mb-0 bg-slate-900 ${
               hoveredIndex !== null && hoveredIndex !== index 
                 ? 'opacity-30 scale-[0.98]' 
                 : 'opacity-100 scale-100'
             }`}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
+            data-cursor="VIEW"
           >
             {/* Video Background with Parallax (Task 18) */}
             <video 
               src={card.videoSrc}
-              className="parallax-video absolute inset-0 w-[120%] max-w-none h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              className="parallax-video absolute inset-0 w-full md:w-[120%] max-w-none h-full object-cover transition-transform duration-1000 group-hover:scale-105 z-0"
               autoPlay
               muted
               loop
-              playsInline
+              playsInline={true}
             />
             
             {/* Premium Gradient Scrim for text readability (Task 18) */}

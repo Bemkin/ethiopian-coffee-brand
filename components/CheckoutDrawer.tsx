@@ -29,13 +29,13 @@ export default function CheckoutDrawer() {
 
   return (
     <>
-      {/* Floating Trigger Button */}
-      <div className="fixed top-8 right-8 z-[100]">
+      {/* Floating Trigger Button — Task 60: Adjusted for mobile proportions */}
+      <div className="fixed top-6 right-6 md:top-8 md:right-[4vw] z-[100]">
         <button 
           onClick={() => setIsOpen(true)}
-          className="bg-brand-navy text-brand-cream px-8 py-4 rounded-full font-sans font-bold tracking-widest text-[11px] uppercase hover:bg-brand-navy/90 transition-all shadow-2xl hover:scale-105 active:scale-95"
+          className="bg-brand-navy text-brand-cream px-4 py-2 text-xs md:px-8 md:py-4 rounded-full font-sans font-bold tracking-widest md:text-[11px] uppercase hover:bg-brand-navy/90 transition-all shadow-2xl hover:scale-105 active:scale-95"
         >
-          Cart (1)
+          Cart <span className="hidden md:inline">(1)</span>
         </button>
       </div>
 

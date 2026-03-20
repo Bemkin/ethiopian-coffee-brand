@@ -5,12 +5,43 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import FrameSequencer from '@/components/FrameSequencer';
 import HorizontalSourceScroll from '@/components/HorizontalSourceScroll';
+import VideoPortal from '@/components/VideoPortal';
 import FlavorMatrix from '@/components/FlavorMatrix';
+import KineticMarquee from '@/components/KineticMarquee';
+import Footer from '@/components/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const bridgeRef = useRef<HTMLElement>(null);
+
+  // Task 30: Staggered Scroll Reveal for Narrative Bridge
+  useEffect(() => {
+    const bridgeSubtitle = gsap.utils.toArray('.bridge-subtitle');
+    const bridgeTitleLines = gsap.utils.toArray('.bridge-title-line');
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: bridgeRef.current,
+        start: "top 60%", 
+        toggleActions: "play none none reverse" 
+      }
+    });
+
+    tl.to(bridgeSubtitle, {
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out'
+    })
+    .to(bridgeTitleLines, {
+      y: 0,
+      duration: 1.2,
+      stagger: 0.15,
+      ease: 'power4.out'
+    }, "-=0.6");
+
+  }, []);
 
   return (
     <main ref={containerRef} className="relative w-full">
@@ -20,37 +51,37 @@ export default function Home() {
         extension="_delay-0.041s.jpg"
       />
 
-      {/* The Narrative Bridge (Task 28: Refined overlap to prevent collision) */}
-      <section className="relative z-20 bg-[#FAF7F2] pt-[10vh] pb-24 md:pt-[15vh] md:pb-32 flex flex-col items-center justify-center -mt-[50vh]">
-        <div className="overflow-hidden">
-          <p className="font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-brand-navy/60 mb-6 text-center">
+      {/* The Narrative Bridge (Task 30: Staggered Scroll Reveal) */}
+      <section ref={bridgeRef} className="relative z-20 bg-[#FAF7F2] min-h-[50vh] py-20 md:pt-[15vh] md:pb-32 flex flex-col items-center justify-center -mt-[20vh] md:-mt-[50vh] px-4">
+        <div className="overflow-hidden mb-6">
+          <p className="bridge-subtitle font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-brand-navy/60 text-center translate-y-full">
             Chapter 01
           </p>
         </div>
-        <div className="overflow-hidden px-6">
-          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-brand-navy text-center leading-[1.1] tracking-tight">
-            From the birthplace<br />of wild Arabica.
-          </h2>
-        </div>
+
+        <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl text-brand-navy text-center leading-[1.1] tracking-tight flex flex-col items-center">
+          <span className="overflow-hidden pb-2">
+            <span className="bridge-title-line block translate-y-full">From the birthplace</span>
+          </span>
+          <span className="overflow-hidden pb-2">
+            <span className="bridge-title-line block translate-y-full">of wild Arabica.</span>
+          </span>
+        </h2>
       </section>
 
       {/* Horizontal Origin Gallery */}
       <HorizontalSourceScroll />
 
+      {/* Cinematic Transition: Chapter 02 Portal (Task 35) */}
+      <VideoPortal />
+
       {/* 3D Flavor Matrix Section */}
       <FlavorMatrix />
 
-      {/* Footer / Contact Section */}
-      <section className="relative min-h-[50vh] flex flex-col items-center justify-center bg-brand-navy text-brand-cream px-8 py-32">
-        <div className="max-w-4xl text-center">
-          <h2 className="text-4xl md:text-6xl font-serif mb-8">From Addis to the World.</h2>
-          <p className="text-xl font-sans opacity-70 mb-12">Join our journey and discover the true essence of coffee.</p>
-          <div className="flex justify-center gap-8">
-            <a href="#" className="uppercase tracking-widest text-sm font-bold border-b border-brand-cream pb-1 hover:opacity-50 transition-opacity">Instagram</a>
-            <a href="#" className="uppercase tracking-widest text-sm font-bold border-b border-brand-cream pb-1 hover:opacity-50 transition-opacity">Wholesale</a>
-          </div>
-        </div>
-      </section>
+      {/* Kinetic Text Marquee (Task 48) */}
+      <KineticMarquee />
+
+      <Footer />
     </main>
   );
 }
