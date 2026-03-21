@@ -189,6 +189,7 @@ export default function HorizontalSourceScroll() {
               muted
               loop
               playsInline={true}
+              preload="auto"
             />
             
             {/* Premium Gradient Scrim for text readability (Task 18) */}

@@ -26,7 +26,7 @@ export default function Preloader() {
       let progress = { value: 0 };
       tl.to(progress, {
         value: 100,
-        duration: 2.2, // This 2.2s window masks React hydration and image decoding
+        duration: 4.5, // Extended from 2.2s to 4.5s to give the browser drastically more time to download the 192 Hero canvas frames
         ease: "power2.out",
         onUpdate: () => {
           if (counterRef.current) {
