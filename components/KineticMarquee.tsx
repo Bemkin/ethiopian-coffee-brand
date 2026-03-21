@@ -54,7 +54,7 @@ export default function KineticMarquee() {
         {/* Target 2: Handles the infinite horizontal scrolling */}
         <div 
           ref={trackRef} 
-          className="flex whitespace-nowrap text-[#FAF7F2] font-sans text-xl md:text-2xl tracking-[0.2em] uppercase origin-center"
+          className="flex whitespace-nowrap text-[#FAF7F2] font-sans text-xl md:text-2xl tracking-[0.2em] uppercase origin-center will-change-transform"
           style={{ width: "max-content" }}
         >
           <div className="flex-shrink-0 px-4">{text}{text}{text}{text}</div>

@@ -167,7 +167,7 @@ export default function HorizontalSourceScroll() {
       {/* The Sliding Track / Vertical Stack */}
       <div 
         ref={trackRef} 
-        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10"
+        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10 will-change-transform"
       >
         {sourceCards.map((card, index) => (
           <div 

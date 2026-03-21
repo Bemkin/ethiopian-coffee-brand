@@ -3,12 +3,15 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import FrameSequencer from '@/components/FrameSequencer';
-import HorizontalSourceScroll from '@/components/HorizontalSourceScroll';
-import VideoPortal from '@/components/VideoPortal';
-import FlavorMatrix from '@/components/FlavorMatrix';
-import KineticMarquee from '@/components/KineticMarquee';
-import Footer from '@/components/Footer';
+import dynamic from 'next/dynamic';
+import FrameSequencer from '@/components/FrameSequencer'; // Keep Hero synchronous for LCP
+import FlavorMatrix from '@/components/FlavorMatrix'; // Keep synchronous — R3F Canvas breaks with dynamic()
+
+// Phase 2: Lazy load heavy below-fold GSAP components
+const HorizontalSourceScroll = dynamic(() => import('@/components/HorizontalSourceScroll'), { ssr: false });
+const VideoPortal = dynamic(() => import('@/components/VideoPortal'), { ssr: false });
+const KineticMarquee = dynamic(() => import('@/components/KineticMarquee'), { ssr: false });
+const Footer = dynamic(() => import('@/components/Footer'));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +21,9 @@ export default function Home() {
 
   // Task 30: Staggered Scroll Reveal for Narrative Bridge
   useEffect(() => {
+    // Phase 3: Prevent GSAP from jumping if the main thread hangs on mobile
+    gsap.ticker.lagSmoothing(1000, 16);
+
     const bridgeSubtitle = gsap.utils.toArray('.bridge-subtitle');
     const bridgeTitleLines = gsap.utils.toArray('.bridge-title-line');
 

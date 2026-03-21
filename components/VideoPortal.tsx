@@ -83,6 +83,7 @@ export default function VideoPortal() {
         <video 
           src="/assets/ceremony2.mp4"
           autoPlay loop muted playsInline
+          preload="none"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 hidden md:block"
         />
 
@@ -90,6 +91,7 @@ export default function VideoPortal() {
         <video 
           src="/assets/VID_20260320_205834_999.mp4"
           autoPlay loop muted playsInline
+          preload="none"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 md:hidden"
         />
         
