@@ -20,7 +20,7 @@ const poppins = Poppins({
 
 // Task 74: Elite SEO & Social Graph Metadata
 export const metadata: Metadata = {
-  metadataBase: new URL('https://kaffaroasters.com'), // TODO: Replace with actual live URL
+  metadataBase: new URL('https://ethiopian-coffee-brand-w9sf.vercel.app'), // Live Vercel URL
   title: {
     default: 'Kaffa Roasters | Specialty Coffee from Addis Ababa',
     template: '%s | Kaffa Roasters',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Kaffa Roasters | The Origin of Coffee',
     description: 'Experience the birthplace of coffee. Premium specialty coffee from Addis Ababa.',
-    url: 'https://kaffaroasters.com',
+    url: 'https://ethiopian-coffee-brand-w9sf.vercel.app',
     siteName: 'Kaffa Roasters',
     images: [
       {
@@ -74,7 +74,7 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'CafeOrCoffeeShop',
     name: 'Kaffa Roasters',
-    image: 'https://kaffaroasters.com/og-image.jpg',
+    image: 'https://ethiopian-coffee-brand-w9sf.vercel.app/og-image.jpg',
     description: 'Premium specialty coffee roasted in Addis Ababa, sourced directly from the Kaffa Biosphere.',
     address: {
       '@type': 'PostalAddress',
@@ -82,7 +82,7 @@ export default function RootLayout({
       addressCountry: 'ET',
     },
     priceRange: '$$',
-    url: 'https://kaffaroasters.com',
+    url: 'https://ethiopian-coffee-brand-w9sf.vercel.app',
   };
 
   return (
