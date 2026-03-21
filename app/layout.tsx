@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CheckoutDrawer from "@/components/CheckoutDrawer";
 import Navbar from "@/components/Navbar";
 import GlobalCursor from '@/components/GlobalCursor';
+import Preloader from '@/components/Preloader';
 
 const merriweather = Merriweather({
   variable: "--font-merriweather",
@@ -88,6 +89,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${merriweather.variable} ${poppins.variable} antialiased`}>
       <body className="bg-[#FAF7F2] antialiased" suppressHydrationWarning>
+        <Preloader />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
