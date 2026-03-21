@@ -82,6 +82,7 @@ export default function VideoPortal() {
         {/* Desktop Video */}
         <video 
           src="/assets/ceremony2.mp4"
+          poster="/assets/ceremony2-poster.jpg"
           autoPlay loop muted playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 hidden md:block"
@@ -90,6 +91,7 @@ export default function VideoPortal() {
         {/* Mobile Video (Native Vertical) */}
         <video 
           src="/assets/VID_20260320_205834_999.mp4"
+          poster="/assets/VID_20260320_205834_999-poster.jpg"
           autoPlay loop muted playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 md:hidden"

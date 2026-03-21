@@ -184,6 +184,7 @@ export default function HorizontalSourceScroll() {
             {/* Video Background with Parallax (Task 18) */}
             <video 
               src={card.videoSrc}
+              poster={card.videoSrc.replace('.mp4', '-poster.jpg')}
               className="parallax-video absolute inset-0 w-full md:w-[120%] max-w-none h-full object-cover transition-transform duration-1000 group-hover:scale-105 z-0"
               autoPlay
               muted
