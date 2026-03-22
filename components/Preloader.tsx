@@ -13,11 +13,18 @@ export default function Preloader() {
     document.body.style.overflow = 'hidden';
     window.scrollTo(0, 0);
 
+    // 1.5. Aggressively intercept DOM scroll events to definitively bypass Lenis/Safari wheel passthrough
+    const blockScroll = (e: Event) => e.preventDefault();
+    window.addEventListener('wheel', blockScroll, { passive: false });
+    window.addEventListener('touchmove', blockScroll, { passive: false });
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
-          // Unlock the page and remove the component from the DOM
+          // Unlock the page, detach listeners, and unmount component
           document.body.style.overflow = 'unset';
+          window.removeEventListener('wheel', blockScroll);
+          window.removeEventListener('touchmove', blockScroll);
           setIsFinished(true);
         }
       });
@@ -26,7 +33,7 @@ export default function Preloader() {
       let progress = { value: 0 };
       tl.to(progress, {
         value: 100,
-        duration: 4.5, // Extended from 2.2s to 4.5s to give the browser drastically more time to download the 192 Hero canvas frames
+        duration: 7.0, // Drastically extended to mask 50MB background video negotiations
         ease: "power2.out",
         onUpdate: () => {
           if (counterRef.current) {
@@ -35,13 +42,13 @@ export default function Preloader() {
         }
       });
 
-      // 3. Fade and slide the text away
+      // 3. Fade and slide the text away (With added breathing room)
       tl.to(textRef.current, {
         y: -30,
         opacity: 0,
         duration: 0.6,
         ease: "power3.inOut"
-      }, "+=0.2");
+      }, "+=0.5");
 
       // 4. The Grand Reveal (Curtain slides up)
       tl.to(loaderRef.current, {
@@ -51,7 +58,11 @@ export default function Preloader() {
       });
     });
 
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener('wheel', blockScroll);
+      window.removeEventListener('touchmove', blockScroll);
+      ctx.revert();
+    }
   }, []);
 
   // completely remove from DOM after animation completes

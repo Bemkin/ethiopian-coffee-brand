@@ -15,41 +15,65 @@ export default function VideoPortal() {
   useEffect(() => {
     if (!containerRef.current || !videoWrapperRef.current || !textRef.current) return;
 
-    // ONE unified animation for ALL sizes — the card-expansion always works
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "+=150%", 
-        scrub: true,
-        pin: true,
+    let mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      // Desktop Setup (Wide Horizontal Portal)
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "+=150%", 
+          scrub: true,
+          pin: true,
+        }
+      });
+
+      tl.fromTo(videoWrapperRef.current, 
+        { clipPath: "inset(20% 30% 20% 30% round 24px)" },
+        { clipPath: "inset(0% 0% 0% 0% round 0px)", duration: 1, ease: "power2.inOut" }, 0
+      )
+      .to('.watermark-text', { opacity: 0, scale: 1.1, duration: 0.8, ease: 'power2.out' }, 0) 
+      .fromTo(textRef.current, 
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.2" 
+      );
+
+      return () => {
+        tl.scrollTrigger?.kill();
+        tl.kill();
       }
     });
 
-    tl.to(videoWrapperRef.current, {
-      width: "100vw",
-      height: "100vh",
-      borderRadius: "0px",
-      force3D: "auto",
-      ease: "power2.inOut",
-      duration: 1
-    }, 0)
-    .to('.watermark-text', { 
-      opacity: 0, 
-      scale: 1.1,
-      duration: 0.8, 
-      ease: 'power2.out'
-    }, 0) 
-    .fromTo(textRef.current, 
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-      "-=0.2" 
-    );
+    mm.add("(max-width: 767px)", () => {
+      // Mobile Setup (Tall Portrait Portal)
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "+=150%", 
+          scrub: true,
+          pin: true,
+        }
+      });
 
-    return () => {
-      tl.scrollTrigger?.kill();
-      tl.kill();
-    };
+      tl.fromTo(videoWrapperRef.current, 
+        { clipPath: "inset(15% 10% 15% 10% round 24px)" },
+        { clipPath: "inset(0% 0% 0% 0% round 0px)", duration: 1, ease: "power2.inOut" }, 0
+      )
+      .to('.watermark-text', { opacity: 0, scale: 1.1, duration: 0.8, ease: 'power2.out' }, 0) 
+      .fromTo(textRef.current, 
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.2" 
+      );
+
+      return () => {
+        tl.scrollTrigger?.kill();
+        tl.kill();
+      }
+    });
+
+    return () => mm.revert();
   }, []);
 
   // Task 79: iOS Video Autoplay Hardening
@@ -93,15 +117,12 @@ export default function VideoPortal() {
         </h2>
       </div>
 
-      {/* 3. The Portal Card — ONE wrapper, unified GSAP for all sizes */}
+      {/* 3. The Portal GPU Masked Card */}
       <div 
         ref={videoWrapperRef}
-        className="absolute inset-0 m-auto z-20 flex items-center justify-center bg-[#0a0a0a] overflow-hidden"
-        style={{ 
-          width: "25vw", 
-          height: "55vh", 
-          borderRadius: "24px" 
-        }}
+        className="absolute inset-0 z-20 w-full h-full flex items-center justify-center bg-[#0a0a0a] overflow-hidden"
+        style={{ clipPath: "inset(20% 30% 20% 30% round 24px)" }}
+
         data-cursor="PLAY"
       >
         {/* Desktop Video */}
