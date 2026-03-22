@@ -13,6 +13,13 @@ export default function VideoPortal() {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Task 79: Force lazy playback explicitly (iOS Safari autoPlay restrictions)
+    const videos = containerRef.current?.querySelectorAll('video');
+    videos?.forEach(vid => {
+      // Explicit play command circumvents generic attribute blocks on some WebKit builds
+      vid.play().catch(e => console.warn("VideoPortal Autoplay prevented:", e));
+    });
+
     if (!containerRef.current || !videoWrapperRef.current || !textRef.current) return;
 
     // ONE unified animation for ALL sizes — the card-expansion always works
@@ -52,7 +59,7 @@ export default function VideoPortal() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
+    <section ref={containerRef} className="relative h-screen-safe w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
       
       {/* 1. The Floating Chapter Label */}
       <div className="absolute top-[15vh] w-full text-center z-10 pointer-events-none">

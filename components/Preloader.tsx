@@ -9,15 +9,27 @@ export default function Preloader() {
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    // 1. Instantly lock the scroll so the user can't break the layout
+    // Task 79: Robust iOS Body Locking
+    // 1. Instantly lock the scroll, but cache the exact scrollY to prevent iOS jumping.
+    const scrollY = window.scrollY;
+    
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
-    window.scrollTo(0, 0);
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
-          // Unlock the page and remove the component from the DOM
-          document.body.style.overflow = 'unset';
+          // Task 79: Unlock the page and meticulously restore the scroll position
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          
+          window.scrollTo(0, scrollY);
           setIsFinished(true);
         }
       });
@@ -60,7 +72,7 @@ export default function Preloader() {
   return (
     <div 
       ref={loaderRef}
-      className="fixed inset-0 z-[99999] bg-[#003548] text-[#FAF7F2] flex flex-col items-center justify-center"
+      className="fixed top-0 left-0 w-full h-screen-safe z-[99999] bg-[#003548] text-[#FAF7F2] flex flex-col items-center justify-center"
     >
       <div ref={textRef} className="flex flex-col items-center gap-4">
         <span className="text-xs tracking-[0.4em] uppercase text-[#FAF7F2]/50">

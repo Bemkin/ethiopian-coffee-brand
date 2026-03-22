@@ -55,6 +55,22 @@ export default function HorizontalSourceScroll() {
 
     if (!section || !track || !bgText) return;
 
+    // Task 79: iOS Video Memory Hardening
+    // Actively pause off-screen videos to prevent thermal throttling and Safari tab crashes.
+    const videoElements = track.querySelectorAll('video');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const vid = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) {
+          vid.play().catch(e => console.warn("Auto-play prevented:", e));
+        } else {
+          vid.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    videoElements.forEach(vid => observer.observe(vid));
+
     const mm = gsap.matchMedia();
 
     // Desktop: Full horizontal pinning experience
@@ -134,6 +150,7 @@ export default function HorizontalSourceScroll() {
 
     return () => {
       mm.revert();
+      if (observer) observer.disconnect();
     };
   }, []);
 
@@ -167,7 +184,7 @@ export default function HorizontalSourceScroll() {
       {/* The Sliding Track / Vertical Stack */}
       <div 
         ref={trackRef} 
-        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10 will-change-transform"
+        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen-safe items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10"
       >
         {sourceCards.map((card, index) => (
           <div 

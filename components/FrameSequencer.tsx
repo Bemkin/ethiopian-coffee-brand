@@ -15,11 +15,13 @@ if (typeof window !== 'undefined') {
 export default function FrameSequencer({ 
   frameCount, 
   baseUrl, 
-  extension 
+  extension,
+  stepMultiplier = 1
 }: { 
   frameCount: number, 
   baseUrl: string, 
-  extension: string
+  extension: string,
+  stepMultiplier?: number 
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +43,10 @@ export default function FrameSequencer({
     
     for (let i = 0; i < frameCount; i++) {
       const img = new Image();
-      const frameIndex = i.toString().padStart(3, '0');
+      // Task 79: If on mobile (96 frames, step = 2), i=1 maps to file `002.jpg`, compressing the sequence visually over the exact same time
+      const actualFileIndex = Math.floor(i * stepMultiplier);
+      const frameIndex = actualFileIndex.toString().padStart(3, '0');
+      
       img.src = `${baseUrl}${frameIndex}${extension}`;
       img.onload = () => {
         loadedCount++;
@@ -52,7 +57,7 @@ export default function FrameSequencer({
       loadedImages.push(img);
     }
     setImages(loadedImages);
-  }, [frameCount, baseUrl, extension]);
+  }, [frameCount, baseUrl, extension, stepMultiplier]);
 
   useEffect(() => {
     if (!isLoaded || images.length < frameCount || !canvasRef.current || !containerRef.current || !innerRef.current) return;
@@ -157,9 +162,9 @@ export default function FrameSequencer({
   return (
     <div ref={containerRef} className="relative w-full h-[250vh] md:h-[400vh] bg-[#FAF7F2]" suppressHydrationWarning>
       {/* Pinned Container */}
-      <div ref={innerRef} className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+      <div ref={innerRef} className="relative h-screen-safe w-full flex items-center justify-center overflow-hidden">
         {/* The existing Canvas Wrapper (Task 63: Feathered Edges) */}
-        <div id="hero-canvas-wrapper" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[60vh] md:h-[80vh] lg:h-screen z-0">
+        <div id="hero-canvas-wrapper" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[60vh] md:h-[80vh] lg:h-screen-safe z-0">
           <canvas 
             ref={canvasRef} 
             className="w-full h-full object-cover object-center transition-transform duration-75 mix-blend-multiply brightness-[1.1] contrast-[1.1] md:mix-blend-normal md:brightness-100 md:contrast-100" 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import dynamic from 'next/dynamic';
@@ -18,9 +18,17 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const bridgeRef = useRef<HTMLElement>(null);
+  
+  // Task 79: Mobile Memory Relief
+  const [frameCount, setFrameCount] = useState(192);
 
-  // Task 30: Staggered Scroll Reveal for Narrative Bridge
   useEffect(() => {
+    // Only drop to 96 frames on very constrained mobile devices
+    if (window.innerWidth < 768) {
+      // By compressing the sequence into 96 evenly spaced frames, we cut VRAM pressure in half.
+      setFrameCount(96);
+    }
+    
     // Phase 3: Prevent GSAP from jumping if the main thread hangs on mobile
     gsap.ticker.lagSmoothing(1000, 16);
 
@@ -52,7 +60,8 @@ export default function Home() {
   return (
     <main ref={containerRef} className="relative w-full">
       <FrameSequencer
-        frameCount={192}
+        frameCount={frameCount}
+        stepMultiplier={192 / frameCount}
         baseUrl="/assets/hero-sequence/frame_"
         extension="_delay-0.041s.jpg"
       />
