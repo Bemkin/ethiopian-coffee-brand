@@ -24,8 +24,9 @@ export default function VideoPortal() {
           trigger: containerRef.current,
           start: "top top",
           end: "+=150%", 
-          scrub: true,
+          scrub: 1.2, // Smooth interpolation for desktop
           pin: true,
+          anticipatePin: 1,
         }
       });
 
@@ -52,8 +53,9 @@ export default function VideoPortal() {
           trigger: containerRef.current,
           start: "top top",
           end: "+=150%", 
-          scrub: true,
+          scrub: 1.5, // 1.5s heavy dampening to fully obliterate iOS Chrome scroll jitter
           pin: true,
+          anticipatePin: 1,
         }
       });
 

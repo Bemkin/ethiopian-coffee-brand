@@ -190,7 +190,7 @@ export default function HorizontalSourceScroll() {
         {sourceCards.map((card, index) => (
           <div 
             key={card.id} 
-            className={`source-card relative w-[100vw] md:w-[52vw] h-[60dvh] md:h-[65vh] flex-shrink-0 flex flex-col justify-end overflow-hidden group transition-all duration-700 mb-8 md:mb-0 bg-slate-900 ${
+            className={`source-card relative w-[100vw] md:w-[52vw] h-[60svh] md:h-[65vh] flex-shrink-0 flex flex-col justify-end overflow-hidden group transition-all duration-700 mb-8 md:mb-0 bg-slate-900 ${
               hoveredIndex !== null && hoveredIndex !== index 
                 ? 'opacity-30 scale-[0.98]' 
                 : 'opacity-100 scale-100'
