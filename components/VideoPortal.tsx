@@ -124,8 +124,11 @@ export default function VideoPortal() {
         ref={videoWrapperRef}
         className="absolute inset-0 z-20 w-full h-full flex flex-col items-center justify-center bg-[#0a0a0a] overflow-hidden portal-mask"
         style={{ 
-          clipPath: "inset(20% 30% 20% 30% round 24px)", 
-          willChange: "clip-path, transform" 
+          // Removed hard-coded desktop insets to prevent hydration snap on mobile
+          clipPath: "inset(0% 0% round 0px)", 
+          WebkitClipPath: "inset(0% 0% round 0px)",
+          transform: "translateZ(0)",
+          willChange: "clip-path, -webkit-clip-path" 
         }}
         data-cursor="PLAY"
       >
