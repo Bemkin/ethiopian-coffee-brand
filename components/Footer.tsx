@@ -53,7 +53,7 @@ export default function Footer() {
   return (
     <footer 
       ref={footerRef} 
-      className="relative w-full bg-[#003548] text-[#FAF7F2] pt-32 pb-12 px-6 md:px-12 flex flex-col justify-between min-h-[60vh] md:min-h-[80vh] rounded-t-[2rem] md:rounded-t-[4rem] -mt-10 md:-mt-16 z-20"
+      className="relative w-full bg-[#003548] text-[#FAF7F2] pt-32 pb-12 px-6 md:px-12 flex flex-col justify-between min-h-[60svh] md:min-h-[80vh] rounded-t-[2rem] md:rounded-t-[4rem] -mt-10 md:-mt-16 z-20"
     >
       <div className="flex flex-col items-center justify-center flex-grow">
         <p className="text-sm md:text-lg tracking-[0.2em] uppercase text-[#FAF7F2]/70 mb-8 text-center">

@@ -103,7 +103,7 @@ export default function FlavorMatrix() {
   return (
     <section 
       ref={containerRef} 
-      className="relative min-h-screen w-full overflow-hidden transition-colors duration-700 ease-in-out py-20 md:py-0 px-8 md:px-0"
+      className="relative min-h-[100svh] w-full overflow-hidden transition-colors duration-700 ease-in-out py-20 md:py-0 px-8 md:px-0"
       style={{ backgroundColor: activeFlavor.color }}
     >
       

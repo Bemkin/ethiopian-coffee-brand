@@ -21,12 +21,6 @@ if (typeof window !== 'undefined') {
     ignoreMobileResize: true,
     autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,orientationchange" 
   });
-  
-  // THE FIX: Only activate the nuclear scroll hijack if the user is physically on a touch screen.
-  // Desktop PCs will ignore this and use native, smooth scrolling.
-  if (ScrollTrigger.isTouch === 1) {
-    ScrollTrigger.normalizeScroll(true);
-  }
 }
 
 export default function Home() {
