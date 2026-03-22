@@ -103,7 +103,7 @@ export default function VideoPortal() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative z-50 h-[100lvh] md:h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
+    <section ref={containerRef} className="relative z-50 h-[100svh] md:h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
       
       {/* 1. The Floating Chapter Label */}
       <div className="absolute top-[15vh] w-full text-center z-10 pointer-events-none">

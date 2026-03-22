@@ -13,7 +13,15 @@ const VideoPortal = dynamic(() => import('@/components/VideoPortal'), { ssr: fal
 const KineticMarquee = dynamic(() => import('@/components/KineticMarquee'), { ssr: false });
 const Footer = dynamic(() => import('@/components/Footer'));
 
-gsap.registerPlugin(ScrollTrigger);
+// Task 81: The Chrome iOS Refresh Nuke
+// Overrides GSAP's default resize event listener to prevent pinning tears on iPhone Chrome.
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ 
+    ignoreMobileResize: true,
+    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,orientationchange" 
+  });
+}
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
