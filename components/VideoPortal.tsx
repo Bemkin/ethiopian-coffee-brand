@@ -27,8 +27,8 @@ export default function VideoPortal() {
     });
 
     tl.to(videoWrapperRef.current, {
-      width: "100%",
-      height: "100%",
+      width: "100vw",
+      height: "100vh",
       borderRadius: "0px",
       force3D: "auto",
       ease: "power2.inOut",
