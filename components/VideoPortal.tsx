@@ -26,6 +26,9 @@ export default function VideoPortal() {
           end: "+=150%", 
           scrub: 1.2, // Smooth interpolation for desktop
           pin: true,
+          pinType: ScrollTrigger.isTouch === 1 ? "transform" : "fixed",
+          preventOverlaps: true,
+          fastScrollEnd: true,
           anticipatePin: 1,
         }
       });
@@ -55,6 +58,9 @@ export default function VideoPortal() {
           end: "+=150%", 
           scrub: 1.5, // 1.5s heavy dampening to fully obliterate iOS Chrome scroll jitter
           pin: true,
+          pinType: ScrollTrigger.isTouch === 1 ? "transform" : "fixed",
+          preventOverlaps: true,
+          fastScrollEnd: true,
           anticipatePin: 1,
         }
       });

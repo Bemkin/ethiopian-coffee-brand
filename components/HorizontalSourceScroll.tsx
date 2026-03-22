@@ -72,8 +72,11 @@ export default function HorizontalSourceScroll() {
           start: 'top top',
           end: () => `+=${getScrollDistance()}`, // Scroll duration based on total width
           pin: true,
+          pinType: ScrollTrigger.isTouch === 1 ? "transform" : "fixed",
           scrub: 1, // Smooth scrub matching Lenis
           invalidateOnRefresh: true,
+          preventOverlaps: true,
+          fastScrollEnd: true,
         },
       });
 
