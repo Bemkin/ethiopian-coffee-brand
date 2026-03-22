@@ -207,8 +207,7 @@ export default function HorizontalSourceScroll() {
               muted
               loop
               playsInline
-              // @ts-ignore - Legacy iOS Safari requirement
-              webkit-playsinline="true"
+              {...{"webkit-playsinline": "true"}}
               preload="auto"
             />
             

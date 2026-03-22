@@ -30,6 +30,7 @@ export default function VideoPortal() {
       width: "100%",
       height: "100%",
       borderRadius: "0px",
+      force3D: "auto",
       ease: "power2.inOut",
       duration: 1
     }, 0)
@@ -76,7 +77,7 @@ export default function VideoPortal() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-[100dvh] md:h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
+    <section ref={containerRef} className="relative h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
       
       {/* 1. The Floating Chapter Label */}
       <div className="absolute top-[15vh] w-full text-center z-10 pointer-events-none">
@@ -108,8 +109,7 @@ export default function VideoPortal() {
           src="/assets/ceremony2.mp4"
           poster="/assets/ceremony2-poster.jpg"
           muted loop playsInline
-          // @ts-ignore - Legacy iOS Safari parameter
-          webkit-playsinline="true"
+          {...{"webkit-playsinline": "true"}}
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 hidden md:block"
         />
@@ -119,8 +119,7 @@ export default function VideoPortal() {
           src="/assets/VID_20260320_205834_999.mp4"
           poster="/assets/VID_20260320_205834_999-poster.jpg"
           muted loop playsInline
-          // @ts-ignore - Legacy iOS Safari parameter
-          webkit-playsinline="true"
+          {...{"webkit-playsinline": "true"}}
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 md:hidden"
         />
