@@ -172,10 +172,10 @@ export default function HorizontalSourceScroll() {
       {/* 2. Ambient Light Leak / Blurred Orb (Task 21) */}
       <div className="absolute top-1/2 left-0 w-[60vw] h-[60vw] bg-[#E8D8A6]/20 rounded-full blur-[120px] -translate-y-1/2 z-0 pointer-events-none ambient-glow" />
 
-      {/* Massive Parallax Background Text (Task 18) */}
+      {/* Massive Parallax Background Text (Task 18) - Absolute on mobile to prevent bleed */}
       <div 
         ref={bgTextRef}
-        className="giant-bg-text fixed md:absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] md:opacity-5 pointer-events-none"
+        className="giant-bg-text absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] md:opacity-5 pointer-events-none"
       >
         <h2 className="font-serif text-[20vw] font-black uppercase tracking-tighter whitespace-nowrap">
           ORIGIN KAFFA • ADDIS ABABA • ETHIOPIA
@@ -225,8 +225,8 @@ export default function HorizontalSourceScroll() {
         ))}
       </div>
 
-      {/* Dynamic Progress Indicator (Task 19) */}
-      <div className="absolute bottom-8 md:bottom-12 left-8 md:left-[10vw] right-8 md:right-[10vw] flex items-center gap-6 z-30 pointer-events-none">
+      {/* Dynamic Progress Indicator (Task 19) - Hidden on mobile to prevent z-index collision with VideoPortal */}
+      <div className="absolute bottom-8 md:bottom-12 left-8 md:left-[10vw] right-8 md:right-[10vw] hidden md:flex items-center gap-6 z-30 pointer-events-none">
         <span className="font-sans text-xs md:text-sm text-brand-navy tracking-[0.2em]">01</span>
         <div className="h-[1px] flex-1 bg-brand-navy/20 relative overflow-hidden">
           <div className="progress-fill absolute top-0 left-0 h-full bg-brand-navy w-0" />
