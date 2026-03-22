@@ -55,22 +55,6 @@ export default function HorizontalSourceScroll() {
 
     if (!section || !track || !bgText) return;
 
-    // Task 79: iOS Video Memory Hardening
-    // Actively pause off-screen videos to prevent thermal throttling and Safari tab crashes.
-    const videoElements = track.querySelectorAll('video');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const vid = entry.target as HTMLVideoElement;
-        if (entry.isIntersecting) {
-          vid.play().catch(e => console.warn("Auto-play prevented:", e));
-        } else {
-          vid.pause();
-        }
-      });
-    }, { threshold: 0.1 });
-
-    videoElements.forEach(vid => observer.observe(vid));
-
     const mm = gsap.matchMedia();
 
     // Desktop: Full horizontal pinning experience
@@ -82,6 +66,7 @@ export default function HorizontalSourceScroll() {
       gsap.to(track, {
         x: () => -getScrollDistance(),
         ease: 'none',
+        force3D: "auto",
         scrollTrigger: {
           trigger: section,
           start: 'top top',
@@ -148,9 +133,25 @@ export default function HorizontalSourceScroll() {
       // Dynamic height adjustments above this section can cause ScrollTrigger to misfire on mobile, leaving cards stranded at opacity: 0.
     });
 
+    // iOS Autoplay Hardening (Task 79)
+    const videos = section.querySelectorAll('video');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const vid = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) {
+          vid.play().catch(() => {}); // Suppress DOMException if user hasn't interacted
+        } else {
+          vid.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    videos.forEach(v => observer.observe(v));
+
     return () => {
       mm.revert();
-      if (observer) observer.disconnect();
+      videos.forEach(v => observer.unobserve(v));
+      observer.disconnect();
     };
   }, []);
 
@@ -184,12 +185,12 @@ export default function HorizontalSourceScroll() {
       {/* The Sliding Track / Vertical Stack */}
       <div 
         ref={trackRef} 
-        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen-safe items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10"
+        className="relative md:absolute top-0 left-0 flex flex-col md:flex-row w-full md:w-max h-auto md:h-screen items-center px-0 md:pl-[10vw] md:pr-[20vw] gap-0 md:gap-[10vw] z-10"
       >
         {sourceCards.map((card, index) => (
           <div 
             key={card.id} 
-            className={`source-card relative w-[100vw] md:w-[52vw] h-[60vh] md:h-[65vh] flex-shrink-0 flex flex-col justify-end overflow-hidden group transition-all duration-700 mb-8 md:mb-0 bg-slate-900 ${
+            className={`source-card relative w-[100vw] md:w-[52vw] h-[60dvh] md:h-[65vh] flex-shrink-0 flex flex-col justify-end overflow-hidden group transition-all duration-700 mb-8 md:mb-0 bg-slate-900 ${
               hoveredIndex !== null && hoveredIndex !== index 
                 ? 'opacity-30 scale-[0.98]' 
                 : 'opacity-100 scale-100'
@@ -203,10 +204,11 @@ export default function HorizontalSourceScroll() {
               src={card.videoSrc}
               poster={card.videoSrc.replace('.mp4', '-poster.jpg')}
               className="parallax-video absolute inset-0 w-full md:w-[120%] max-w-none h-full object-cover transition-transform duration-1000 group-hover:scale-105 z-0"
-              autoPlay
               muted
               loop
-              playsInline={true}
+              playsInline
+              // @ts-ignore - Legacy iOS Safari requirement
+              webkit-playsinline="true"
               preload="auto"
             />
             

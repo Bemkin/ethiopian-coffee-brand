@@ -13,13 +13,6 @@ export default function VideoPortal() {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Task 79: Force lazy playback explicitly (iOS Safari autoPlay restrictions)
-    const videos = containerRef.current?.querySelectorAll('video');
-    videos?.forEach(vid => {
-      // Explicit play command circumvents generic attribute blocks on some WebKit builds
-      vid.play().catch(e => console.warn("VideoPortal Autoplay prevented:", e));
-    });
-
     if (!containerRef.current || !videoWrapperRef.current || !textRef.current) return;
 
     // ONE unified animation for ALL sizes — the card-expansion always works
@@ -58,8 +51,32 @@ export default function VideoPortal() {
     };
   }, []);
 
+  // Task 79: iOS Video Autoplay Hardening
+  useEffect(() => {
+    const videos = containerRef.current?.querySelectorAll('video');
+    if (!videos) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const vid = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) {
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    videos.forEach(vid => observer.observe(vid));
+
+    return () => {
+      videos.forEach(vid => observer.unobserve(vid));
+      observer.disconnect();
+    };
+  }, []);
+
   return (
-    <section ref={containerRef} className="relative h-screen-safe w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
+    <section ref={containerRef} className="relative h-[100dvh] md:h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
       
       {/* 1. The Floating Chapter Label */}
       <div className="absolute top-[15vh] w-full text-center z-10 pointer-events-none">
@@ -90,7 +107,9 @@ export default function VideoPortal() {
         <video 
           src="/assets/ceremony2.mp4"
           poster="/assets/ceremony2-poster.jpg"
-          autoPlay loop muted playsInline
+          muted loop playsInline
+          // @ts-ignore - Legacy iOS Safari parameter
+          webkit-playsinline="true"
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 hidden md:block"
         />
@@ -99,7 +118,9 @@ export default function VideoPortal() {
         <video 
           src="/assets/VID_20260320_205834_999.mp4"
           poster="/assets/VID_20260320_205834_999-poster.jpg"
-          autoPlay loop muted playsInline
+          muted loop playsInline
+          // @ts-ignore - Legacy iOS Safari parameter
+          webkit-playsinline="true"
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105 md:hidden"
         />

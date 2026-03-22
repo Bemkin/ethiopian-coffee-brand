@@ -15,16 +15,6 @@
   --color-foreground: var(--foreground);
 }
 
-/* Task 79: iOS Dynamic Viewport Solution */
-.h-screen-safe {
-  height: 100vh; /* Fallback for older browsers */
-  height: 100dvh; /* Modern mobile browsers */
-}
-.min-h-screen-safe {
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

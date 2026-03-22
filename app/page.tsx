@@ -19,16 +19,18 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const bridgeRef = useRef<HTMLElement>(null);
   
-  // Task 79: Mobile Memory Relief
+  // Task 79: Dynamic Canvas Memory (Mobile-Only Frame Drop)
   const [frameCount, setFrameCount] = useState(192);
 
   useEffect(() => {
-    // Only drop to 96 frames on very constrained mobile devices
+    // Strictly client-side detection to prevent hydration mismatch
     if (window.innerWidth < 768) {
-      // By compressing the sequence into 96 evenly spaced frames, we cut VRAM pressure in half.
       setFrameCount(96);
     }
-    
+  }, []);
+
+  // Task 30: Staggered Scroll Reveal for Narrative Bridge
+  useEffect(() => {
     // Phase 3: Prevent GSAP from jumping if the main thread hangs on mobile
     gsap.ticker.lagSmoothing(1000, 16);
 
@@ -61,7 +63,6 @@ export default function Home() {
     <main ref={containerRef} className="relative w-full">
       <FrameSequencer
         frameCount={frameCount}
-        stepMultiplier={192 / frameCount}
         baseUrl="/assets/hero-sequence/frame_"
         extension="_delay-0.041s.jpg"
       />
