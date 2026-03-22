@@ -101,7 +101,7 @@ export default function VideoPortal() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
+    <section ref={containerRef} className="relative z-20 h-[100svh] md:h-screen w-full bg-[#FAF7F2] flex items-center justify-center overflow-hidden mt-0 md:mt-[15vh]">
       
       {/* 1. The Floating Chapter Label */}
       <div className="absolute top-[15vh] w-full text-center z-10 pointer-events-none">
@@ -120,9 +120,11 @@ export default function VideoPortal() {
       {/* 3. The Portal GPU Masked Card */}
       <div 
         ref={videoWrapperRef}
-        className="absolute inset-0 z-20 w-full h-full flex items-center justify-center bg-[#0a0a0a] overflow-hidden"
-        style={{ clipPath: "inset(20% 30% 20% 30% round 24px)" }}
-
+        className="absolute inset-0 z-20 w-full h-full flex flex-col items-center justify-center bg-[#0a0a0a] overflow-hidden portal-mask"
+        style={{ 
+          clipPath: "inset(20% 30% 20% 30% round 24px)", 
+          willChange: "clip-path, transform" 
+        }}
         data-cursor="PLAY"
       >
         {/* Desktop Video */}

@@ -157,9 +157,9 @@ export default function FrameSequencer({
   return (
     <div ref={containerRef} className="relative w-full h-[250vh] md:h-[400vh] bg-[#FAF7F2]" suppressHydrationWarning>
       {/* Pinned Container */}
-      <div ref={innerRef} className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+      <div ref={innerRef} className="relative h-[100svh] md:h-screen w-full flex items-center justify-center overflow-hidden">
         {/* The existing Canvas Wrapper (Task 63: Feathered Edges) */}
-        <div id="hero-canvas-wrapper" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[60vh] md:h-[80vh] lg:h-screen z-0">
+        <div id="hero-canvas-wrapper" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[60svh] md:h-[80vh] lg:h-screen z-0">
           <canvas 
             ref={canvasRef} 
             className="w-full h-full object-cover object-center transition-transform duration-75 mix-blend-multiply brightness-[1.1] contrast-[1.1] md:mix-blend-normal md:brightness-100 md:contrast-100" 
