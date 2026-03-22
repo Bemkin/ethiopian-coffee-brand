@@ -96,7 +96,7 @@ export default function VideoPortal() {
       {/* 3. The Portal Card — ONE wrapper, unified GSAP for all sizes */}
       <div 
         ref={videoWrapperRef}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center bg-[#0a0a0a] overflow-hidden"
+        className="absolute inset-0 m-auto z-20 flex items-center justify-center bg-[#0a0a0a] overflow-hidden"
         style={{ 
           width: "25vw", 
           height: "55vh", 
