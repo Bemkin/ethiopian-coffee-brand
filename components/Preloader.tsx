@@ -12,15 +12,18 @@ export default function Preloader() {
   const [readyComponents, setReadyComponents] = useState<Set<string>>(new Set());
   const REQUIRED_COMPONENTS = ['hero', 'gallery', 'matrix', 'portal'];
 
+  // Global handler to lock scroll
+  const blockScrollRef = useRef<(e: Event) => void>(() => {});
+
   useEffect(() => {
     // 1. Instantly lock the scroll so the user can't break the layout
     document.body.style.overflow = 'hidden';
     window.scrollTo(0, 0);
 
     // 1.5. Aggressively intercept DOM scroll events
-    const blockScroll = (e: Event) => e.preventDefault();
-    window.addEventListener('wheel', blockScroll, { passive: false });
-    window.addEventListener('touchmove', blockScroll, { passive: false });
+    blockScrollRef.current = (e: Event) => e.preventDefault();
+    window.addEventListener('wheel', blockScrollRef.current, { passive: false });
+    window.addEventListener('touchmove', blockScrollRef.current, { passive: false });
 
     // 2. Safety timeout: proceed anyway after 30 seconds if some component hangs
     const timer = setTimeout(() => {
@@ -53,8 +56,8 @@ export default function Preloader() {
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('wheel', blockScroll);
-      window.removeEventListener('touchmove', blockScroll);
+      window.removeEventListener('wheel', blockScrollRef.current);
+      window.removeEventListener('touchmove', blockScrollRef.current);
       window.removeEventListener('app-component-ready', handleReady as EventListener);
       ctx.revert();
     }
@@ -67,7 +70,10 @@ export default function Preloader() {
     if ((allReady || isTimedOut) && !isFinished) {
       const finishTl = gsap.timeline({
         onComplete: () => {
+          // Task 123: CRITICAL FIX - Explicitly unlock scroll and remove blockers
           document.body.style.overflow = 'unset';
+          window.removeEventListener('wheel', blockScrollRef.current);
+          window.removeEventListener('touchmove', blockScrollRef.current);
           setIsFinished(true);
         }
       });
