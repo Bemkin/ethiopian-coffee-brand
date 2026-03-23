@@ -33,6 +33,7 @@ export default function FrameSequencer({
 
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isFirstFrameLoaded, setIsFirstFrameLoaded] = useState(false);
 
   // Preload images into memory
   useEffect(() => {
@@ -45,6 +46,9 @@ export default function FrameSequencer({
       img.src = `${baseUrl}${frameIndex}${extension}`;
       img.onload = () => {
         loadedCount++;
+        // Priority 1: Render first frame as soon as it arrives
+        if (i === 0) setIsFirstFrameLoaded(true);
+        
         if (loadedCount === frameCount) {
           setIsLoaded(true);
         }
@@ -55,7 +59,7 @@ export default function FrameSequencer({
   }, [frameCount, baseUrl, extension]);
 
   useEffect(() => {
-    if (!isLoaded || images.length < frameCount || !canvasRef.current || !containerRef.current || !innerRef.current) return;
+    if (!isFirstFrameLoaded || !images[0] || !canvasRef.current || !containerRef.current || !innerRef.current) return;
     
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
@@ -71,6 +75,12 @@ export default function FrameSequencer({
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
       }
     };
+
+    // Immediate render of frame 0
+    render(0);
+
+    // Priority 2: Full sequence initialization ONLY when fully loaded
+    if (!isLoaded) return;
 
     const sequence = { frame: 0 };
     const ctx = gsap.context(() => {
@@ -121,14 +131,13 @@ export default function FrameSequencer({
 
     }, containerRef);
 
-    render(0);
-    
     return () => ctx.revert();
-  }, [isLoaded, images, frameCount]);
+  }, [isFirstFrameLoaded, isLoaded, images, frameCount]);
 
   // Task 15: Editorial Masthead Entrance Animation
   useEffect(() => {
-    if (!isLoaded) return;
+    // Priority 3: Trigger entrance typography as soon as the first frame is visible
+    if (!isFirstFrameLoaded) return;
     
     const ctx = gsap.context(() => {
       const entranceTl = gsap.timeline({ delay: 0.2 });
@@ -152,7 +161,7 @@ export default function FrameSequencer({
     });
 
     return () => ctx.revert();
-  }, [isLoaded]);
+  }, [isFirstFrameLoaded]);
 
   return (
     <div ref={containerRef} className="relative w-full h-[250vh] md:h-[400vh] bg-[#FAF7F2]" suppressHydrationWarning>
