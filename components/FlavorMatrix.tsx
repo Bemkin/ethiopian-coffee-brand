@@ -42,6 +42,16 @@ function JebenaCenterpiece() {
   // Load the transparent PNG generated from Google Flow
   const texture = useTexture('/assets/jebena-centerpiece-removebg-preview.png');
   
+  useEffect(() => {
+    // Task 121: Loading Readiness Dispatcher
+    const img = new Image();
+    img.src = '/assets/jebena-centerpiece-removebg-preview.png';
+    img.onload = () => {
+      window.dispatchEvent(new CustomEvent('app-component-ready', { detail: { id: 'matrix' } }));
+      console.log('Matrix ready');
+    };
+  }, []);
+
   return (
     <Float speed={2} rotationIntensity={0.15} floatIntensity={0.8}>
       <mesh>

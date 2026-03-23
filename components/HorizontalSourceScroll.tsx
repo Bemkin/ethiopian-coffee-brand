@@ -150,6 +150,21 @@ export default function HorizontalSourceScroll() {
     
     videos.forEach(v => observer.observe(v));
 
+    // Task 121: Loading Readiness Dispatcher
+    let loadedCount = 0;
+    const handleCanPlayThrough = () => {
+      loadedCount++;
+      if (loadedCount >= videos.length) {
+        window.dispatchEvent(new CustomEvent('app-component-ready', { detail: { id: 'gallery' } }));
+        console.log('Gallery ready');
+      }
+    };
+
+    videos.forEach(v => {
+      if (v.readyState >= 3) handleCanPlayThrough(); // HAVE_FUTURE_DATA is enough for a smooth start
+      else v.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
+    });
+
     return () => {
       mm.revert();
       videos.forEach(v => observer.unobserve(v));

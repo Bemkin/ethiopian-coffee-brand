@@ -100,6 +100,21 @@ export default function VideoPortal() {
 
     videos.forEach(vid => observer.observe(vid));
 
+    // Task 121: Loading Readiness Dispatcher
+    let loadedCount = 0;
+    const handleCanPlayThrough = () => {
+      loadedCount++;
+      if (loadedCount >= videos.length) {
+        window.dispatchEvent(new CustomEvent('app-component-ready', { detail: { id: 'portal' } }));
+        console.log('Portal ready');
+      }
+    };
+
+    videos.forEach(v => {
+      if ((v as HTMLVideoElement).readyState >= 3) handleCanPlayThrough();
+      else v.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
+    });
+
     return () => {
       videos.forEach(vid => observer.unobserve(vid));
       observer.disconnect();

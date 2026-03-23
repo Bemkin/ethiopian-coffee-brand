@@ -163,6 +163,13 @@ export default function FrameSequencer({
     return () => ctx.revert();
   }, [isFirstFrameLoaded]);
 
+  useEffect(() => {
+    if (isLoaded) {
+      window.dispatchEvent(new CustomEvent('app-component-ready', { detail: { id: 'hero' } }));
+      console.log('Hero ready');
+    }
+  }, [isLoaded]);
+
   return (
     <div ref={containerRef} className="relative w-full h-[250vh] md:h-[400vh] bg-[#FAF7F2]" suppressHydrationWarning>
       {/* Pinned Container */}
